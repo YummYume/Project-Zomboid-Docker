@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  zomboid-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: zomboid-server
+    ports:
+      - 16261:16261
+      - 16262:16262
+    environment:
+      USER: "${USER:?err}"
+      HOMEDIR: "${HOMEDIR:?err}"
+      STEAMCMDDIR: "${STEAMCMDDIR:?err}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:?err}"
+      SERVER_NAME: "${SERVER_NAME:?err}"
+    volumes:
+      # Contains everything about your server
+      - ./server:/home/steam/Zomboid/
