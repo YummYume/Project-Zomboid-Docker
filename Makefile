@@ -4,7 +4,8 @@ EXEC=$(COMPOSE) exec zomboid-server
 # Starting/stopping the server
 start: build-no-cache up-recreate
 
-restart: stop up-recreate
+restart:
+	$(COMPOSE) restart
 
 build:
 	$(COMPOSE) build --force-rm

@@ -5,17 +5,37 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        PUID: "${PUID:?err}"
     restart: unless-stopped
     container_name: zomboid-server
     ports:
-      - 16261:16261
-      - 16262:16262
+      # Default port for connecting
+      - "16261:16261/udp"
+      - "16261:16261/tcp"
+      # Port range for player count (here 10 max)
+      - "16262-16272:16262-16272/udp"
+      - "16262-16272:16262-16272/tcp"
+      # Steam port 1
+      - "8766:8766/udp"
+      - "8766:8766/tcp"
+      # Steam port 2
+      - "8767:8767/udp"
+      - "8767:8767/tcp"
+      # RCON port
+      - "27015:27015/udp"
+      - "27015:27015/tcp"
     environment:
       USER: "${USER:?err}"
       HOMEDIR: "${HOMEDIR:?err}"
       STEAMCMDDIR: "${STEAMCMDDIR:?err}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD:?err}"
       SERVER_NAME: "${SERVER_NAME:?err}"
+      PORT: "${PORT:?err}"
+      UDP_PORT: "${UDP_PORT:?err}"
+      STEAM_VAC: "${STEAM_VAC:?err}"
+      STEAM_PORT1: "${STEAM_PORT1:?err}"
+      STEAM_PORT2: "${STEAM_PORT2:?err}"
     volumes:
       # Contains everything about your server
       - ./server:/home/steam/Zomboid/
