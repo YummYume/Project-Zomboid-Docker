@@ -5,18 +5,18 @@ ENV SERVER_NAME=myserver
 ENV PORT=16271
 ENV UDP_PORT=16272
 ENV STEAM_VAC=true
-ENV STEAM_PORT1=8766
-ENV STEAM_PORT2=8767
 
-ARG PUID=1000
+ARG GID=1000
 
-COPY --chown=${PUID} ./scripts ./
+COPY --chown=${USER} ./scripts ./
 
 USER root
 
-RUN mkdir /opt/pzserver && \
-    chown ${PUID}:${USER} -R /opt/pzserver ${HOMEDIR} && \
-    chmod 774 ./run.sh ./update_zomboid.txt
+RUN groupadd -f ${GID} && \
+    usermod -a -G ${GID} ${USER} && \
+    mkdir /opt/pzserver && \
+    chown ${USER}:${GID} -R /opt/pzserver ${HOMEDIR} ./run.sh ./update_zomboid.txt && \
+    chmod 770 ./
 
 USER ${USER}
 
